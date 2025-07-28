@@ -7,7 +7,6 @@ public class PostgresJobStorage : IJobStorage
 {
     private readonly NpgsqlConnection _writerConn;
     private readonly NpgsqlConnection _readerConn;
-    private readonly NpgsqlConnection _eventConn;
 
     private readonly SemaphoreSlim _readerConnSemaphore = new SemaphoreSlim(1, 1);
 
@@ -17,7 +16,6 @@ public class PostgresJobStorage : IJobStorage
     {
         _writerConn = new NpgsqlConnection("Host=localhost;Username=postgres;Password=postgres");
         _readerConn = new NpgsqlConnection(_writerConn.ConnectionString);
-        _eventConn = new NpgsqlConnection(_writerConn.ConnectionString);
 
         _channel = Channel.CreateUnbounded<Job>();
     }
@@ -26,7 +24,6 @@ public class PostgresJobStorage : IJobStorage
     {
         await _writerConn.OpenAsync();
         await _readerConn.OpenAsync();
-        await _eventConn.OpenAsync();
 
         // Clear table to avoid PK conflicts
         await using var truncateCommand = new NpgsqlCommand("TRUNCATE TABLE jobs", _writerConn);
