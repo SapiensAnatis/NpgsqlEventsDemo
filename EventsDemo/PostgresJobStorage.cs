@@ -63,7 +63,7 @@ public class PostgresJobStorage : IJobStorage
         //
         // Apply a short timeout in case of an empty channel so that we can react better to bursts of NOTIFY commands.
         // You can see the need for this if you remove the all of the sleeps -- this thread will probably get stuck 
-        // in WaitAsync after running job #8, because it enters the call between when the last NOTIFY is issued and
+        // in WaitAsync after running job #9, because it enters the call between when the last NOTIFY is issued and
         // when the last job is placed into the channel, so it waits for a NOTIFY that will never come.
 
         CancellationTokenSource cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(250));
